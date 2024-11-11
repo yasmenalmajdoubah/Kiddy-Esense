@@ -1,0 +1,139 @@
+<div class="container-fluid gedf-wrapper mt-4">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card" style="background-color: #fff; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); border-radius: 10px;">
+        <div class="card-body text-center">
+          <img 
+            class="rounded-circle profile-image" 
+            width="120" 
+            [src]="user?.profileImage || 'https://thumbs.dreamstime.com/z/mom-daughter-family-portrait-asian-mother-sport-wear-sneakers-vector-illustration-simple-shapes-185297261.jpg'" 
+            alt="Profile Picture" 
+          />
+          <div class="h5 mt-2 text-primary" style="font-size: 1.5rem; font-weight: bold; font-family: 'Arial', sans-serif;">
+            {{ user?.firstName }} {{ user?.lastName }}
+          </div>
+        </div>
+      </div>
+
+      <div class="calendar mt-4">
+        <h5 class="text-center" style="font-size: 1.5rem; color: #1877f2;">November 2024</h5>
+        <div class="weekdays">
+          <div>Sun</div>
+          <div>Mon</div>
+          <div>Tue</div>
+          <div>Wed</div>
+          <div>Thu</div>
+          <div>Fri</div>
+          <div>Sat</div>
+        </div>
+        <div class="days">
+          <div></div><div></div><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div>
+          <div>6</div><div>7</div><div>8</div><div>9</div><div>10</div><div>11</div><div>12</div>
+          <div>13</div><div>14</div><div>15</div><div>16</div><div>17</div><div>18</div><div>19</div>
+          <div>20</div><div>21</div><div>22</div><div>23</div><div>24</div><div>25</div><div>26</div>
+          <div>27</div><div>28</div><div>29</div><div>30</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 gedf-main">
+      <div class="card gedf-card shadow-sm mb-4" style="border: none; background-color: #fff; border-radius: 10px;">
+        <div class="card-body">
+          <form [formGroup]="postForm">
+            <div class="form-group">
+              <label for="contentText" class="font-weight-bold">What’s on your mind?</label>
+              <textarea formControlName="txtContentText" class="form-control" rows="3" placeholder="Share your thoughts..."></textarea>
+            </div>
+            <div class="form-group">
+              <label for="imageForPost" class="btn btn-light d-flex align-items-center">
+                <i class="fas fa-camera" style="font-size: 1.2rem; margin-right: 10px;"></i> 
+                <span>Add Photo</span>
+              </label>
+              <input type="file" id="imageForPost" formControlName="txtContentImage" (change)="onFileSelected($event)" class="form-control" style="display: none;">
+            </div>
+            <button type="button" class="btn btn-primary mt-4" (click)="submitPost()">Share</button>
+          </form>
+        </div>
+      </div>
+
+      <div *ngIf="post; else noPosts">
+        <div class="card mb-3 shadow-lg" *ngFor="let p of post" style="border-radius: 12px; background-color: #fff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+          <div class="card-header bg-light" style="border-radius: 8px;">
+            <div class="d-flex align-items-center">
+              <img class="rounded-circle mr-3" width="60" [src]="p.user?.profileImage || 'https://thumbs.dreamstime.com/z/mom-daughter-family-portrait-asian-mother-sport-wear-sneakers-vector-illustration-simple-shapes-185297261.jpg'" 
+                   style="border: 2px solid #ddd; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);" />
+              <div>
+                <span class="font-weight-bold" style="font-size: 1.2rem; color: #1877f2;">
+                  {{ p.user?.firstName + " " + p.user?.lastName || 'Unknown User' }}
+                </span>
+                <div class="text-muted small" style="font-size: 0.8rem; margin-top: 5px;">
+                  {{ p.createdAt | date: 'short' }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <p>{{ p.contentText }}</p>
+            <img *ngIf="p.contentImage" [src]="p.contentImage" alt="Post Image" class="img-fluid rounded mb-3" 
+                 style="max-height: 400px; object-fit: cover; border-radius: 8px;">
+            <div class="d-flex justify-content-between mt-3">
+              <div>
+                <button (click)="toggleComments(p.postId)" class="btn btn-outline-primary comment-btn">
+                  <i class="fas fa-comment"></i> 
+                  <span style="color: #1877f2;">Comment</span>
+                </button>
+                <button (click)="toggleLike(p.postId)" class="btn btn-outline-primary like-btn">
+                  <i class="fa" [ngClass]="isLiked(p.postId) ? 'fa-thumbs-up' : 'fa-thumbs-o-up'"></i>
+                  <span style="color: #1877f2;">{{ isLiked(p.postId) ? 'Unlike' : 'Like' }}</span>
+                </button>
+                <button class="show-likes-btn" (click)="showLikesList(p.postId)">
+                  Show Likes ({{ postLikes[p.postId]?.length || 0 }})
+                </button>
+              </div>
+            </div>
+
+            <div *ngIf="showLikesPopup[p.postId]" class="popup-container">
+              <div class="popup">
+                <div class="popup-header">
+                  <h5>Likes</h5>
+                  <button class="close-btn" (click)="closePopup(p.postId)">×</button>
+                </div>
+                <div class="popup-body">
+                  <ul>
+                    <li *ngFor="let l of postLikes[p.postId]">
+                      {{ l.firstName }} {{ l.lastName }}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="showComments[p.postId]" class="mt-3">
+              <div *ngFor="let comment of p.comments" class="d-flex border-bottom pb-2 mb-2">
+                <img class="rounded-circle mr-3" width="35" [src]="comment.user?.profileImage || 'https://thumbs.dreamstime.com/z/mom-daughter-family-portrait-asian-mother-sport-wear-sneakers-vector-illustration-simple-shapes-185297261.jpg'" />
+                <div>
+                  <strong class="small" style="color: #1877f2;">
+                    {{ comment.user?.firstName }} {{ comment.user?.lastName }}
+                  </strong>
+                  <p class="ml-3" style="font-size: 0.95rem; color: #333;">{{ comment.content }}</p>
+                </div>
+              </div>
+
+              <form [formGroup]="commentForm" (ngSubmit)="createComment(p.postId)">
+                <div class="form-group">
+                  <input formControlName="txtContentText" class="form-control" placeholder="Add a comment..." />
+                </div>
+                <button type="submit" class="btn btn-outline-primary">Submit</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #noPosts>
+        <p class="text-muted text-center">No posts available</p>
+      </ng-template>
+    </div>
+  </div>
+</div>

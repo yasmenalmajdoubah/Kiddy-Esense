@@ -1,0 +1,147 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f7fb;
+  color: #333;
+}
+
+.container-fluid {
+  max-width: 1200px;
+}
+
+.card {
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  background-color: #f1f1f1;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+img.rounded-circle {
+  border-radius: 50%;
+}
+
+.profile-image {
+  border: 2px solid #ddd;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+textarea.form-control {
+  font-size: 1rem;
+  border-radius: 8px;
+}
+
+.calendar {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.calendar .weekdays div,
+.calendar .days div {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  margin: 2px;
+}
+
+.calendar .weekdays div {
+  font-weight: bold;
+  color: #666;
+}
+
+.calendar .days div {
+  background-color: #f4f7fb;
+  border-radius: 50%;
+}
+
+.comment-btn,
+.like-btn {
+  font-size: 1.2rem;
+  border-radius: 6px;
+  padding: 8px 20px;
+  margin-right: 15px;
+  transition: 0.3s;
+}
+
+.comment-btn:hover,
+.like-btn:hover {
+  background-color: #1877f2;
+  color: #fff;
+}
+
+.show-likes-btn {
+  background-color: transparent;
+  border: none;
+  color: #1877f2;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.show-likes-btn:hover {
+  text-decoration: underline;
+}
+
+.popup-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 60%;
+  height: 50%;
+}
+
+.popup {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  position: relative;
+  max-height: 80%;
+  overflow-y: auto;
+}
+
+.popup-header {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  display: flex;
+  justify-content: space-between;
+}
+
+.popup-body ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.popup-body li {
+  font-size: 1.1rem;
+  padding: 8px 0;
+}
+
+.close-btn {
+  font-size: 1.5rem;
+  color: #333;
+  cursor: pointer;
+}
+
+.comment-form {
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.comment-form input {
+  width: 100%;
+  border: none;
+  background-color: #f9f9f9;
+  font-size: 1rem;
+}

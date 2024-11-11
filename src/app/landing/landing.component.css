@@ -1,0 +1,11 @@
+
+.hero {
+    background: url('https://cdn.vectorstock.com/i/1000v/92/27/line-young-kids-playing-follow-my-leader-vector-32169227.jpg') no-repeat right /cover;
+    height: 100vh;
+    display: flex;
+    justify-content: flex-end; 
+    align-items: flex-start; 
+    padding: 20px; 
+    color: rgba(104, 35, 7, 0.788);
+    text-align: right;
+}
